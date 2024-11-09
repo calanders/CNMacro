@@ -1,14 +1,38 @@
-package com.calvinnordstrom.cnmacro;
+package com.calvinnordstrom.cnmacro.controller;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import com.calvinnordstrom.cnmacro.macro.MacroModel;
+import com.calvinnordstrom.cnmacro.util.ServiceLocator;
+import com.calvinnordstrom.cnmacro.view.MainView;
+import javafx.application.Platform;
+import javafx.scene.Parent;
 
-public class HelloController {
-    @FXML
-    private Label welcomeText;
+public class MainController {
+    private final MacroModel model;
+    private final MainView view;
 
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+    public MainController(MacroModel model, MainView view) {
+        this.model = model;
+        this.view = view;
+
+        init();
+        initEventHandlers();
+    }
+
+    private void init() {
+        view.setMacros(model.getMacros());
+    }
+
+    private void initEventHandlers() {
+        ServiceLocator serviceLocator = ServiceLocator.getInstance();
+
+        serviceLocator.getMenuItem("exit").setOnAction(_ -> exit());
+    }
+
+    public void exit() {
+        Platform.exit();
+    }
+
+    public Parent getView() {
+        return view;
     }
 }
